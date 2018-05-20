@@ -1,0 +1,10 @@
+*.jar
+
+.gradle/
+.idea/
+gradle/
+build/
+out/
+
+secret-keys.gpg
+gradle.properties
