@@ -17,6 +17,8 @@ public class Sorting {
     @NotNull
     private String field;
 
+    private String rawSql;
+
     @NotNull
     private SortingDirection direction;
 }
