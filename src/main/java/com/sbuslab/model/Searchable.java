@@ -11,4 +11,5 @@ public @interface Searchable {
     String query();
     boolean selectable() default true;
     String matchAgainstColumn() default "";
+    boolean rawSql() default false;
 }
