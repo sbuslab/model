@@ -38,7 +38,7 @@ public class SecureString implements CharSequence {
     public static SecureString fromString(String value) {
         if (value == null) return null;
 
-        if (value.substring(0, 9).equals("secret:::")) {
+        if (value.startsWith("secret:::")) {
             return new SecureString(new String(Base64.getUrlDecoder().decode(value.substring(9))));
         }
 
