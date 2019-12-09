@@ -10,10 +10,10 @@ import lombok.EqualsAndHashCode;
 
 @EqualsAndHashCode
 @JsonDeserialize(using = SecureStringDeserializer.class)
-public class SecureString {
+public class SecureString implements CharSequence {
 
     private static final Base64.Decoder b64Decoder = Base64.getUrlDecoder();
-    private static final Base64.Encoder b64Encoder = Base64.getUrlEncoder().withoutPadding();
+    private static final Base64.Encoder b64Encoder = Base64.getUrlEncoder();
 
     private final String value;
 
@@ -38,6 +38,21 @@ public class SecureString {
 
     public String original() {
         return this.value;
+    }
+
+    @Override
+    public int length() {
+        return this.value.length();
+    }
+
+    @Override
+    public char charAt(int index) {
+        return this.value.charAt(index);
+    }
+
+    @Override
+    public CharSequence subSequence(int start, int end) {
+        return this.value.subSequence(start, end);
     }
 
     @JsonValue
