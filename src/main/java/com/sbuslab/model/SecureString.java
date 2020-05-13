@@ -16,13 +16,15 @@ public class SecureString implements CharSequence {
     private static final Base64.Encoder b64Encoder = Base64.getUrlEncoder();
 
     private final String value;
+    private final String encodedValue;
 
     public SecureString(final String original) {
         this.value = original;
+        this.encodedValue = "secret:::" + b64Encoder.encodeToString(this.value.getBytes());
     }
 
     public SecureString(final byte[] original) {
-        this.value = new String(original);
+        this(new String(original));
     }
 
     @JsonCreator
@@ -42,22 +44,22 @@ public class SecureString implements CharSequence {
 
     @Override
     public int length() {
-        return this.value.length();
+        return this.encodedValue.length();
     }
 
     @Override
     public char charAt(int index) {
-        return this.value.charAt(index);
+        return this.encodedValue.charAt(index);
     }
 
     @Override
     public CharSequence subSequence(int start, int end) {
-        return this.value.subSequence(start, end);
+        return this.encodedValue.subSequence(start, end);
     }
 
     @JsonValue
     @Override
     public String toString() {
-        return "secret:::" + b64Encoder.encodeToString(this.value.getBytes());
+        return this.encodedValue;
     }
 }
