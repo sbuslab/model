@@ -27,6 +27,19 @@ object ErrorMessage {
     case 503 ⇒ new ServiceUnavailableError(msg, cause, error, _links, _embedded)
     case _   ⇒ new ErrorMessage(code, msg, cause, error, _links, _embedded)
   }
+
+  def sanitizeMessage(msg: String) =
+    if (msg == null) {
+      null
+    } else if (msg.startsWith("Can't deserialize")) {
+      "Can't deserialize JSON message"
+    } else if (msg.contains("NullPointerException")) {
+      "Something went wrong (NPE)"
+    } else if (msg.contains("SQL")) {
+      "Database error"
+    } else {
+      msg.take(1024)
+    }
 }
 
 trait UnrecoverableFailure
