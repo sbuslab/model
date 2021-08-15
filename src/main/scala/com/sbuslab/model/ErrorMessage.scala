@@ -35,7 +35,7 @@ object ErrorMessage {
       "Can't deserialize JSON message"
     } else if (msg.contains("NullPointerException")) {
       "Something went wrong (NPE)"
-    } else if (msg.contains("SQL")) {
+    } else if (msg.contains("SQL") || msg.contains("JDBC")) {
       "Database error"
     } else {
       msg.take(1024)
