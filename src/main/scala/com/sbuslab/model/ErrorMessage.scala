@@ -23,6 +23,7 @@ object ErrorMessage {
     case 409 ⇒ new ConflictError(msg, cause, error, _links, _embedded)
     case 429 ⇒ new TooManyRequestError(msg, cause, error, _links, _embedded)
     case 456 ⇒ new UnrecoverableError(msg, cause, error, _links, _embedded)
+    case 449 ⇒ new RecoverableError(msg, cause, error, _links, _embedded)
     case 500 ⇒ new InternalServerError(msg, cause, error, _links, _embedded)
     case 503 ⇒ new ServiceUnavailableError(msg, cause, error, _links, _embedded)
     case _   ⇒ new ErrorMessage(code, msg, cause, error, _links, _embedded)
