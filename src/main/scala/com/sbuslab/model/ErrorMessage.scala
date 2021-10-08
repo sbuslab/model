@@ -113,6 +113,12 @@ class UnrecoverableError(msg: String, cause: Throwable = null, error: String = n
   def this(msg: String, cause: Throwable, error: String) = this(msg, cause, error, null, null)
 }
 
+class RecoverableError(msg: String, cause: Throwable = null, error: String = null, _links: java.util.Map[String, Object] = null, _embedded: java.util.Map[String, Object] = null) extends ErrorMessage(449, msg, cause, error, _links, _embedded) {
+  def this(msg: String) = this(msg, null, null, null, null)
+  def this(msg: String, cause: Throwable) = this(msg, cause, null, null, null)
+  def this(msg: String, cause: Throwable, error: String) = this(msg, cause, error, null, null)
+}
+
 
 object Check {
   def req(cond: Boolean, message: String) = require(cond, throw new BadRequestError(message))
