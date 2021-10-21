@@ -1,5 +1,7 @@
 package com.sbuslab.model
 
+import java.util.concurrent.TimeoutException
+
 import com.fasterxml.jackson.core.JsonProcessingException
 
 
@@ -14,6 +16,21 @@ class ErrorMessage(
 
 
 object ErrorMessage {
+
+  def from(ex: Throwable, message: String = null): ErrorMessage = ex match {
+    case e: ErrorMessage ⇒
+      fromCode(e.code, Option(message).getOrElse(e.getMessage), cause = e.getCause, error = e.error, _links = e._links, _embedded = e._embedded)
+
+    case e @ (_: NullPointerException | _: IllegalArgumentException | _: JsonProcessingException) ⇒
+      new BadRequestError(Option(message).getOrElse(e.toString), e)
+
+    case e: TimeoutException ⇒
+      new ErrorMessage(504, Option(message).getOrElse(e.toString), e)
+
+    case e: Throwable ⇒
+      new ConflictError(Option(message).getOrElse(e.toString), e)
+  }
+
   def fromCode(code: Int, msg: String, cause: Throwable = null, error: String = null, _links: java.util.Map[String, Object] = null, _embedded: java.util.Map[String, Object] = null): ErrorMessage = code match {
     case 400 ⇒ new BadRequestError(msg, cause, error, _links, _embedded)
     case 401 ⇒ new UnauthorizedError(msg, cause, error, None, _links, _embedded)
