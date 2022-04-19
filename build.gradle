@@ -8,22 +8,22 @@ buildscript {
 
 plugins {
     id 'io.codearte.nexus-staging' version '0.30.0' apply false
-    id "com.bmuschko.nexus" version "2.3.1"
+    id "maven-publish"
 }
 
 apply plugin: 'scala'
+apply plugin: 'java-library'
 
 group 'com.sbuslab'
 
 repositories {
     maven { url 'https://oss.sonatype.org/content/repositories/public' }
     mavenCentral()
-    jcenter()
 }
 
 if (this.parent == null) {
     apply plugin: 'io.codearte.nexus-staging'
-    apply plugin: 'com.bmuschko.nexus'
+    apply plugin: 'maven-publish'
 
     nexusStaging {
         packageGroup = 'com.sbuslab'
@@ -33,43 +33,72 @@ if (this.parent == null) {
     }
 }
 
-modifyPom {
-    project {
-        name 'model'
-        description 'Data model for sbus'
-        url 'https://github.com/sbuslab/model'
-        inceptionYear '2018'
-        scm {
-            url 'https://github.com/sbuslab/model'
-            connection 'scm:https://github.com/sbuslab/model.git'
-            developerConnection 'scm:git://github.com/sbuslab/model.git'
-        }
-        licenses {
-            license {
-                name 'The Apache Software License, Version 2.0'
-                url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-                distribution 'repo'
+publishing {
+        publications {
+        mavenJava(MavenPublication) {
+            artifactId = 'model'
+            from components.java
+            versionMapping {
+                usage('java-api') {
+                    fromResolutionOf('runtimeClasspath')
+                }
+                usage('java-runtime') {
+                    fromResolutionResult()
+                }
+            }
+            pom {
+                name = 'model'
+                description = 'Tools for akka-http (marshaling, error handling, websockets, sbus support)'
+                url = 'https://github.com/sbuslab/model'
+                inceptionYear = '2018'
+
+                licenses {
+                    license {
+                        name = 'The Apache Software License, Version 2.0'
+                        url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                        distribution = 'repo'
+                    }
+                }
+
+                developers {
+                    developer {
+                        id = 'kulikovd'
+                        name = 'Dmitry Kulikov'
+                        email = 'kulikov.dm@gmail.com'
+                    }
+                }
+
+                scm {
+                    url = 'https://github.com/sbuslab/model'
+                    connection = 'scm:https://github.com/sbuslab/model.git'
+                    developerConnection = 'scm:git@github.com:sbuslab/model.git'
+                }
             }
         }
-        developers {
-            developer {
-                id 'kulikovd'
-                name 'Dmitry Kulikov'
-                email 'kulikov.dm@gmail.com'
+    }
+    repositories {
+        maven {
+            def releasesRepoUrl = "https://oss.sonatype.org/service/local/staging/deploy/maven2"
+            def snapshotsRepoUrl = "https://oss.sonatype.org/content/repositories/snapshots"
+            url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+
+            credentials {
+                username = project.findProperty('nexusUsername') ?: ''
+                password = project.findProperty('nexusPassword') ?: ''
             }
         }
     }
 }
 
 dependencies {
-    compile 'org.scala-lang:scala-library:2.12.15'
-    compile 'org.scala-lang.modules:scala-java8-compat_2.12:1.0.2'
+    api 'org.scala-lang:scala-library:2.12.15'
+    api 'org.scala-lang.modules:scala-java8-compat_2.12:1.0.2'
 
-    compile 'org.projectlombok:lombok:1.18.22'
+    api 'org.projectlombok:lombok:1.18.22'
 	annotationProcessor 'org.projectlombok:lombok:1.18.22'
 
-    compile 'org.hibernate:hibernate-validator:6.1.0.Alpha6'
-    compile 'org.glassfish:javax.el:3.0.1-b11'
+    api 'org.hibernate:hibernate-validator:6.1.0.Alpha6'
+    api 'org.glassfish:javax.el:3.0.1-b11'
 
-    compile 'com.fasterxml.jackson.core:jackson-databind:2.13.0'
+    api 'com.fasterxml.jackson.core:jackson-databind:2.13.0'
 }
