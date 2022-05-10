@@ -40,7 +40,7 @@ object ErrorMessage {
     case 409 ⇒ new ConflictError(msg, cause, error, _links, _embedded)
     case 429 ⇒ new TooManyRequestError(msg, cause, error, _links, _embedded)
     case 456 ⇒ new UnrecoverableError(msg, cause, error, _links, _embedded)
-    case 449 ⇒ new RecoverableError(msg, cause, error, _links, _embedded)
+    case 412 ⇒ new RecoverableError(msg, cause, error, _links, _embedded)
     case 500 ⇒ new InternalServerError(msg, cause, error, _links, _embedded)
     case 503 ⇒ new ServiceUnavailableError(msg, cause, error, _links, _embedded)
     case _   ⇒ new ErrorMessage(code, msg, cause, error, _links, _embedded)
@@ -131,7 +131,7 @@ class UnrecoverableError(msg: String, cause: Throwable = null, error: String = n
   def this(msg: String, cause: Throwable, error: String) = this(msg, cause, error, null, null)
 }
 
-class RecoverableError(msg: String, cause: Throwable = null, error: String = null, _links: java.util.Map[String, Object] = null, _embedded: java.util.Map[String, Object] = null) extends ErrorMessage(449, msg, cause, error, _links, _embedded) {
+class RecoverableError(msg: String, cause: Throwable = null, error: String = null, _links: java.util.Map[String, Object] = null, _embedded: java.util.Map[String, Object] = null) extends ErrorMessage(412, msg, cause, error, _links, _embedded) {
   def this(msg: String) = this(msg, null, null, null, null)
   def this(msg: String, cause: Throwable) = this(msg, cause, null, null, null)
   def this(msg: String, cause: Throwable, error: String) = this(msg, cause, error, null, null)
