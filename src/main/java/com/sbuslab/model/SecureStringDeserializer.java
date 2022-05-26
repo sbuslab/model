@@ -3,6 +3,7 @@ package com.sbuslab.model;
 import java.io.IOException;
 
 import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 
@@ -17,6 +18,10 @@ public class SecureStringDeserializer extends StdDeserializer<SecureString> {
     }
 
     public SecureString deserialize(JsonParser jsonParser, DeserializationContext context) throws IOException {
+        if (jsonParser.currentToken() != JsonToken.VALUE_STRING) {
+            throw new IllegalArgumentException("Incorrect value for SecureString deserialization! Current value type is: " + jsonParser.currentToken());
+        }
+
         return SecureString.fromString(jsonParser.getText());
     }
 }
