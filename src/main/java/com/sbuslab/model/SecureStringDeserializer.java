@@ -18,7 +18,7 @@ public class SecureStringDeserializer extends StdDeserializer<SecureString> {
     }
 
     public SecureString deserialize(JsonParser jsonParser, DeserializationContext context) throws IOException {
-        if (jsonParser.currentToken() != JsonToken.VALUE_STRING) {
+        if (jsonParser.currentToken().isStructStart()) {
             throw new IllegalArgumentException("Incorrect value for SecureString deserialization! Current value type is: " + jsonParser.currentToken());
         }
 
