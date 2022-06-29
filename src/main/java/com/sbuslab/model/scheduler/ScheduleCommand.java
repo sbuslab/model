@@ -24,4 +24,8 @@ public class ScheduleCommand {
     private String routingKey;
 
     private Object body;
+
+    private String origin;
+
+    private String signature;
 }
