@@ -92,5 +92,5 @@ dependencies {
     api 'org.hibernate:hibernate-validator:6.2.3.Final'
     api 'org.glassfish:jakarta.el:3.0.4'
 
-    api 'com.fasterxml.jackson.core:jackson-databind:2.13.3'
+    api 'com.fasterxml.jackson.core:jackson-databind:2.13.4'
 }
